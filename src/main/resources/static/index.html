@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Task Manager</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 35px 16px;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px #0000000a;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 75px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .add-btn {
+            background: #2563eb;
+            color: white;
+            width: 100%;
+        }
+
+        .task {
+            border: 1px solid #e2e8f0;
+            border-radius: 9px;
+            padding: 15px;
+            margin-top: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .task h3 {
+            margin: 0 0 8px;
+        }
+
+        .task p {
+            color: #64748b;
+            white-space: pre-wrap;
+        }
+
+        .completed h3 {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .complete-btn {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+            margin-left: 5px;
+        }
+
+        #message {
+            margin-top: 10px;
+            color: #b91c1c;
+        }
+
+        .empty {
+            color: #64748b;
+            text-align: center;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Student Task Manager</h1>
+    <p class="subtitle">Plan your work. Track your progress.</p>
+
+    <div class="card">
+        <h2>Add a new task</h2>
+
+        <form id="taskForm">
+            <input id="title" type="text"
+                   placeholder="Task title" required maxlength="150">
+
+            <textarea id="description"
+                      placeholder="Task description"
+                      maxlength="1000"></textarea>
+
+            <button class="add-btn" type="submit">
+                + Add Task
+            </button>
+        </form>
+
+        <div id="message" role="status"></div>
+    </div>
+
+    <div class="card">
+        <h2>Your Tasks</h2>
+        <p id="summary">Loading tasks...</p>
+        <div id="taskList"></div>
+    </div>
+
+</div>
+
+<script>
+    const API = "/api/tasks";
+
+    const form = document.getElementById("taskForm");
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
+    const taskList = document.getElementById("taskList");
+    const summary = document.getElementById("summary");
+    const message = document.getElementById("message");
+
+    async function request(url, options = {}) {
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            throw new Error("Request failed: " + response.status);
+        }
+
+        if (response.status === 204) {
+            return null;
+        }
+
+        return response.json();
+    }
+
+    async function loadTasks() {
+        try {
+            const tasks = await request(API);
+            renderTasks(tasks);
+            message.textContent = "";
+        } catch (error) {
+            message.textContent =
+                "Could not load tasks. Check whether the server is running.";
+            summary.textContent = "";
+        }
+    }
+
+    function renderTasks(tasks) {
+        taskList.replaceChildren();
+
+        const done = tasks.filter(task => task.completed).length;
+        summary.textContent =
+            `${tasks.length} tasks • ${done} completed • ${tasks.length - done} pending`;
+
+        if (tasks.length === 0) {
+            const empty = document.createElement("p");
+            empty.className = "empty";
+            empty.textContent = "No tasks yet. Add your first task!";
+            taskList.appendChild(empty);
+            return;
+        }
+
+        tasks.forEach(task => {
+            const card = document.createElement("div");
+            card.className = "task" +
+                (task.completed ? " completed" : "");
+
+            const heading = document.createElement("h3");
+            heading.textContent = task.title;
+
+            const description = document.createElement("p");
+            description.textContent = task.description || "No description";
+
+            const status = document.createElement("small");
+            status.textContent = task.completed ? "Completed" : "Pending";
+
+            const completeButton = document.createElement("button");
+            completeButton.className = "complete-btn";
+            completeButton.textContent =
+                task.completed ? "Mark Pending" : "Complete";
+
+            completeButton.addEventListener("click", async () => {
+                try {
+                    await request(`${API}/${task.id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            completed: !task.completed
+                        })
+                    });
+                    await loadTasks();
+                } catch (error) {
+                    message.textContent = "Could not update task.";
+                }
+            });
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-btn";
+            deleteButton.textContent = "Delete";
+
+            deleteButton.addEventListener("click", async () => {
+                if (!confirm("Delete this task?")) return;
+
+                try {
+                    await request(`${API}/${task.id}`, {
+                        method: "DELETE"
+                    });
+                    await loadTasks();
+                } catch (error) {
+                    message.textContent = "Could not delete task.";
+                }
+            });
+
+            card.append(heading, description, status,
+                        document.createElement("br"),
+                        completeButton, deleteButton);
+
+            taskList.appendChild(card);
+        });
+    }
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+        message.textContent = "";
+
+        try {
+            await request(API, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: titleInput.value.trim(),
+                    description: descriptionInput.value.trim()
+                })
+            });
+
+            form.reset();
+            await loadTasks();
+        } catch (error) {
+            message.textContent =
+                "Could not add task. Enter a valid title and try again.";
+        }
+    });
+
+    loadTasks();
+</script>
+</body>
+</html>
