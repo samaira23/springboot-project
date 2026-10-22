@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MiniStore — Shop the everyday</title>
+
+    <style>
+        :root {
+            --ink: #20251f;
+            --muted: #777d74;
+            --green: #315b42;
+            --lime: #d9f36a;
+            --cream: #f7f7f1;
+            --line: #e7e8df;
+            --white: #fff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        a { color: inherit; text-decoration: none; }
+        button, input { font: inherit; }
+        button { cursor: pointer; }
+
+        .announcement {
+            padding: 10px;
+            text-align: center;
+            background: var(--green);
+            color: white;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--line);
+            padding: 18px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: -1.5px;
+        }
+
+        .logo span { color: #60834c; }
+
+        .header-note {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        main {
+            max-width: 1440px;
+            margin: auto;
+            padding: 35px 5% 70px;
+        }
+
+        .hero {
+            background: #e8eddf;
+            border-radius: 22px;
+            padding: 45px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 25px;
+            overflow: hidden;
+            margin-bottom: 35px;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--green);
+        }
+
+        .hero h1 {
+            font-size: clamp(36px, 5vw, 64px);
+            line-height: 1.02;
+            letter-spacing: -3px;
+            max-width: 600px;
+            margin: 15px 0;
+        }
+
+        .hero p {
+            color: #626b5c;
+            line-height: 1.7;
+            max-width: 440px;
+        }
+
+        .hero-art {
+            font-size: clamp(75px, 12vw, 150px);
+            transform: rotate(-9deg);
+            background: #d9e4c9;
+            border-radius: 50%;
+            min-width: 160px;
+            width: 220px;
+            height: 220px;
+            display: grid;
+            place-items: center;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 330px;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        h2 {
+            font-size: 28px;
+            letter-spacing: -1px;
+            margin: 5px 0;
+        }
+
+        .muted { color: var(--muted); font-size: 13px; }
+
+        .search {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .search input {
+            width: 100%;
+            min-width: 0;
+            border: 1px solid var(--line);
+            background: white;
+            padding: 12px 14px;
+            border-radius: 10px;
+            outline-color: var(--green);
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 9px;
+            padding: 11px 15px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .btn:hover { transform: translateY(-1px); opacity: .88; }
+        .btn-dark { background: var(--green); color: white; }
+        .btn-light { background: #eef0e8; color: var(--ink); }
+        .btn-lime { background: var(--lime); color: #20251f; }
+        .btn-small { padding: 8px 11px; font-size: 12px; }
+
+        .categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 23px;
+        }
+
+        .category {
+            padding: 9px 14px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .category.active {
+            background: var(--green);
+            color: white;
+            border-color: var(--green);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .product-card {
+            min-width: 0;
+            background: white;
+            border: 1px solid #edeee8;
+            border-radius: 16px;
+            padding: 13px;
+            transition: transform .2s, box-shadow .2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px #263c2410;
+        }
+
+        .product-art {
+            position: relative;
+            height: 170px;
+            display: grid;
+            place-items: center;
+            border-radius: 11px;
+            background: #eff1e8;
+            font-size: 76px;
+        }
+
+        .product-card:nth-child(4n+2) .product-art { background: #f5ece0; }
+        .product-card:nth-child(4n+3) .product-art { background: #e8edf2; }
+        .product-card:nth-child(4n+4) .product-art { background: #f1e8ed; }
+
+        .product-category {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ffffffdb;
+            border-radius: 30px;
+            padding: 6px 9px;
+            font-size: 9px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .product-info { padding: 12px 3px 3px; }
+
+        .product-info h3 {
+            font-size: 16px;
+            margin: 0 0 7px;
+        }
+
+        .description {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+            min-height: 36px;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .price { font-weight: 850; font-size: 18px; }
+        .product-bottom form { margin: 0; }
+        .add-btn { padding: 10px 12px; font-size: 12px; }
+
+        .cart {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 17px;
+            padding: 22px;
+        }
+
+        .cart-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .cart-title h2 { font-size: 21px; }
+
+        .count {
+            background: var(--lime);
+            border-radius: 50px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .empty {
+            padding: 28px 8px;
+            text-align: center;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .empty-icon { font-size: 43px; }
+
+        .cart-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .cart-item-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .cart-item-name { font-weight: 750; font-size: 13px; }
+        .cart-item-price { font-weight: 800; font-size: 13px; }
+        .cart-item-category { color: var(--muted); font-size: 11px; margin-top: 5px; }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            gap: 8px;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quantity button {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--line);
+            background: white;
+            border-radius: 7px;
+            font-weight: 800;
+        }
+
+        .quantity input {
+            width: 25px;
+            border: 0;
+            text-align: center;
+            font-size: 12px;
+            background: transparent;
+        }
+
+        .remove {
+            color: #b33d3d;
+            background: none;
+            border: 0;
+            font-size: 11px;
+            text-decoration: underline;
+        }
+
+        .summary { padding-top: 18px; }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .summary-total {
+            padding-top: 15px;
+            border-top: 1px solid var(--line);
+            font-size: 19px;
+            font-weight: 850;
+        }
+
+        .checkout-btn { width: 100%; margin-top: 8px; padding: 14px; }
+        .checkout-note { font-size: 10px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+        .notice {
+            padding: 14px 18px;
+            background: #e4f5df;
+            color: #285936;
+            border-radius: 10px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .footer {
+            padding: 25px 5%;
+            text-align: center;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+            font-size: 12px;
+        }
+
+        @media (min-width: 1100px) {
+            .products { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+
+        @media (max-width: 850px) {
+            .layout { grid-template-columns: 1fr; }
+            .cart { position: static; }
+            .hero-art { width: 140px; height: 140px; min-width: 140px; }
+        }
+
+        @media (max-width: 500px) {
+            header { padding: 16px 5%; }
+            .header-note { display: none; }
+            main { padding-top: 20px; }
+            .hero { padding: 28px 22px; }
+            .hero-art { min-width: 85px; width: 85px; height: 85px; font-size: 52px; }
+            .hero h1 { letter-spacing: -1.5px; }
+            .products { gap: 10px; }
+            .product-card { padding: 9px; }
+            .product-art { height: 120px; font-size: 52px; }
+            .product-bottom { align-items: start; flex-direction: column; }
+            .add-btn { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="announcement">
+    THOUGHTFUL FINDS FOR EVERYDAY LIFE &nbsp; · &nbsp; WELCOME TO MINISTORE
+</div>
+
+<header>
+    <a href="/" class="logo">mini<span>store.</span></a>
+    <div class="header-note">Good things. Fair prices. Everyday.</div>
+    <a href="#cart" class="btn btn-light">
+        🛒 Cart <span th:text="${cartCount}">0</span>
+    </a>
+</header>
+
+<main>
+    <div class="hero">
+        <div>
+            <div class="eyebrow">The everyday collection</div>
+            <h1>Find your next<br>favourite thing.</h1>
+            <p>Discover useful little upgrades for your life, your home and everywhere in between.</p>
+            <a href="#shop" class="btn btn-dark">Explore collection ↓</a>
+        </div>
+        <div class="hero-art">🛍️</div>
+    </div>
+
+    <div class="notice" th:if="${notice}" th:text="${notice}"></div>
+    <div class="notice" th:if="${orderSuccess}" th:text="${orderSuccess}"></div>
+
+    <div class="layout">
+        <section id="shop">
+            <div class="section-heading">
+                <div>
+                    <div class="eyebrow">Curated for you</div>
+                    <h2>Shop the collection</h2>
+                    <div class="muted"
+                         th:text="${products.size() + ' products found'}">
+                        Products found
+                    </div>
+                </div>
+            </div>
+
+            <form class="search" method="get" action="/">
+                <input type="text" name="q"
+                       placeholder="Search products..."
+                       th:value="${search}">
+                <input type="hidden" name="category"
+                       th:value="${selectedCategory}">
+                <button class="btn btn-dark" type="submit">Search</button>
+            </form>
+
+            <nav class="categories">
+                <a th:each="cat : ${categories}"
+                   th:href="@{/(category=${cat},q=${search})}"
+                   th:text="${cat}"
+                   th:class="${selectedCategory == cat ? 'category active' : 'category'}">
+                    Category
+                </a>
+            </nav>
+
+            <div class="products" th:if="${!products.isEmpty()}">
+                <article class="product-card" th:each="product : ${products}">
+                    <div class="product-art">
+                        <span class="product-category"
+                              th:text="${product.category}">Category</span>
+                        <span th:text="${product.emoji}">🛍️</span>
+                    </div>
+
+                    <div class="product-info">
+                        <h3 th:text="${product.name}">Product name</h3>
+                        <div class="description"
+                             th:text="${product.description}">
+                            Product description
+                        </div>
+
+                        <div class="product-bottom">
+                            <div class="price">
+                                ₹<span th:text="${#numbers.formatDecimal(product.price, 1, 2)}">0.00</span>
+                            </div>
+
+                            <form method="post" action="/cart/add">
+                                <input type="hidden" name="productId"
+                                       th:value="${product.id}">
+                                <button type="submit" class="btn btn-lime add-btn">
+                                    + Add to cart
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <div class="empty" th:if="${products.isEmpty()}">
+                <div class="empty-icon">🔎</div>
+                <strong>No products found</strong>
+                <p>Try another search or choose a different category.</p>
+                <a class="btn btn-light" href="/">Clear filters</a>
+            </div>
+        </section>
+
+        <aside class="cart" id="cart">
+            <div class="cart-title">
+                <h2>Your basket</h2>
+                <span class="count" th:text="${cartCount} + ' items'">0 items</span>
+            </div>
+
+            <div class="empty" th:if="${cartItems.isEmpty()}">
+                <div class="empty-icon">🧺</div>
+                <strong>Your basket is waiting</strong>
+                <p>Find something you love and add it here.</p>
+            </div>
+
+            <div th:each="item : ${cartItems}" class="cart-item">
+                <div class="cart-item-top">
+                    <div>
+                        <div class="cart-item-name"
+                             th:text="${item.product.name}">Product</div>
+                        <div class="cart-item-category"
+                             th:text="${'₹' + #numbers.formatDecimal(item.product.price, 1, 2) + ' each'}">
+                            Price each
+                        </div>
+                    </div>
+                    <div class="cart-item-price">
+                        ₹<span th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}">0.00</span>
+                    </div>
+                </div>
+
+                <div class="cart-actions">
+                    <form method="post" action="/cart/update" class="quantity">
+                        <input type="hidden" name="productId"
+                               th:value="${item.product.id}">
+                        <button type="submit" name="quantity"
+                                th:value="${item.quantity - 1}"
+                                aria-label="Decrease quantity">−</button>
+                        <input type="text" readonly
+                               th:value="${item.quantity}"
+                               aria-label="Current quantity">
+                        <button type="submit" name="quantity"
+                                th:value="${item.quantity + 1}"
+                                aria-label="Increase quantity">+</button>
+                    </form>
+
+                    <form method="post" action="/cart/remove">
+                        <input type="hidden" name="productId"
+                               th:value="${item.product.id}">
+                        <button type="submit" class="remove">Remove</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="summary" th:if="${!cartItems.isEmpty()}">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span th:text="${'₹' + #numbers.formatDecimal(cartTotal, 1, 2)}">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color:#315b42;font-weight:700">FREE</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span th:text="${'₹' + #numbers.formatDecimal(cartTotal, 1, 2)}">₹0.00</span>
+                </div>
+
+                <form method="post" action="/checkout">
+                    <button type="submit" class="btn btn-dark checkout-btn">
+                        Place demo order →
+                    </button>
+                </form>
+
+                <p class="checkout-note">
+                    Demo checkout only. No payment is collected.
+                </p>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<footer class="footer">
+    © 2026 MiniStore · Made for everyday living
+</footer>
+</body>
+</html>
