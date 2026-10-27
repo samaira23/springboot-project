@@ -1,120 +1,122 @@
-# 🛍️ MiniStore – E-Commerce Website
 
-MiniStore is a web-based e-commerce application developed using Java and Spring Boot. It provides a foundation for an online shopping experience, with a web interface for interacting with products and managing store data.
+# MiniStore - E-Commerce Website
 
-The application uses Spring Boot for backend development, Thymeleaf for server-side rendering, Spring Data JPA and Hibernate for database operations, and H2 Database for local data storage.
+MiniStore is a web-based e-commerce application developed using Java and Spring Boot. It provides a simple online shopping experience where users can browse products, search by name, filter by category, manage a shopping cart, and complete a demo checkout.
 
-## ✨ Features
+The application uses Spring Boot MVC and Thymeleaf to render dynamic web pages. Product information is predefined in Java code, while shopping cart contents are maintained in the user's HTTP session.
 
-- **E-Commerce Interface:** A web-based interface for interacting with the online store.
-- **Product Management:** Manage product information supported by the application.
-- **Dynamic Web Pages:** Render dynamic content using Thymeleaf.
-- **Database Integration:** Store application data using H2 Database.
-- **ORM Support:** Use Spring Data JPA and Hibernate for database operations.
-- **Automatic Schema Management:** Configure Hibernate to update the database schema.
-- **Local Development:** Run the application locally without requiring a separately installed database server.
+## Features
 
-> Note: The exact features available depend on the controllers, services, and templates implemented in the project.
+- **Product Catalog:** Browse 16 predefined products across Electronics, Fashion, Accessories, and Home categories.
+- **Product Search:** Search for products by name.
+- **Category Filtering:** Filter products by category.
+- **Shopping Cart:** Add products to the cart and view selected items.
+- **Quantity Management:** Increase or decrease product quantities.
+- **Remove Items:** Remove individual products from the cart.
+- **Price Calculation:** Automatically calculate item totals, subtotal, and cart total.
+- **Demo Checkout:** Simulate placing an order, display the order total, and clear the cart.
+- **Responsive Interface:** Access the shopping interface on desktop and mobile screen sizes.
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| Java 21 | Backend programming language |
-| Spring Boot | Application framework |
-| Spring Web MVC | Handle web requests and responses |
-| Thymeleaf | Render dynamic HTML pages |
-| Spring Data JPA | Database access and persistence |
-| Hibernate | Object-relational mapping (ORM) |
-| H2 Database | Local database storage |
-| HTML | Structure of web pages |
-| CSS | Styling and layout |
-| JavaScript | Client-side interactions, where implemented |
-| Maven | Dependency and build management |
-| Git & GitHub | Version control and source code hosting |
+| Java 21 | Backend programming |
+| Spring Boot 4.1.1 | Application framework |
+| Spring Web MVC | Handle HTTP requests and responses |
+| Thymeleaf | Server-side HTML rendering |
+| HTML5 | Web page structure |
+| CSS3 | Styling and responsive layout |
+| Spring Data JPA | Database integration dependency |
+| Hibernate | ORM integration through JPA |
+| H2 Database | Configured local database |
+| Maven | Dependency management and build automation |
+| Git and GitHub | Version control and source code hosting |
 
-## 🏗️ Application Architecture
+## Project Structure
 
-MiniStore follows a Spring Boot web application architecture.
-
-```text
-              User
-                |
-                v
-          Web Browser
-                |
-                v
-       Thymeleaf Web Interface
-                |
-                v
-       Spring Boot / MVC Layer
-                |
-                v
-       Spring Data JPA
-                |
-                v
-          Hibernate ORM
-                |
-                v
-          H2 Database
-```
-
-### How It Works
-
-1. The user interacts with the website through a browser.
-2. Spring MVC handles incoming web requests.
-3. The application processes requests using its Java components.
-4. Spring Data JPA and Hibernate handle database operations.
-5. The application returns the appropriate web page to the browser.
-
-## 📂 Project Structure
-
-The project follows the standard Maven and Spring Boot directory structure.
+The repository contains the following application files:
 
 ```text
 springboot-project/
-│
-├── .mvn/
-│   └── wrapper/
-│
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/example/
-│       │       └── ...
-│       │
-│       └── resources/
-│           ├── static/
-│           │   ├── css/
-│           │   ├── js/
-│           │   └── images/
-│           │
-│           ├── templates/
-│           │   └── ...
-│           │
-│           └── application.properties
-│
-├── .gitignore
-├── mvnw
-├── mvnw.cmd
-├── pom.xml
-└── README.md
+|
+|-- .mvn/
+|   |-- wrapper/
+|       |-- maven-wrapper.properties
+|
+|-- src/
+|   |-- main/
+|       |-- java/
+|       |   |-- com/
+|       |       |-- example/
+|       |           |-- ecommerce/
+|       |               |-- EcommerceApplication.java
+|       |               |-- Product.java
+|       |               |-- StoreController.java
+|       |
+|       |-- resources/
+|           |-- templates/
+|           |   |-- index.html
+|           |
+|           |-- application.properties
+|
+|-- .gitattributes
+|-- .gitignore
+|-- mvnw
+|-- mvnw.cmd
+|-- pom.xml
+|-- README.md
 ```
 
-*Note: The directory tree above illustrates the typical Spring Boot structure. Actual package and resource names may differ in the repository.*
+### Main Application Files
 
-## ⚙️ Prerequisites
+- **EcommerceApplication.java:** Entry point that starts the Spring Boot application.
+- **Product.java:** Defines the product model, including ID, name, price, description, category, and emoji-based product illustration.
+- **StoreController.java:** Handles product search, category filtering, cart operations, quantity updates, item removal, and demo checkout.
+- **index.html:** Contains the Thymeleaf-based storefront, product catalog, search controls, category filters, shopping cart, and checkout interface.
+- **application.properties:** Contains the application name, server port, H2 database settings, JPA configuration, and Thymeleaf settings.
+- **pom.xml:** Defines project dependencies, Java version, and Maven build configuration.
 
-Before running the application, install:
+## Application Architecture
+
+```text
+          User
+            |
+            v
+       Web Browser
+            |
+            v
+    Thymeleaf HTML Page
+        index.html
+            |
+            v
+    Spring MVC Controller
+     StoreController.java
+            |
+       +----+----+
+       |         |
+       v         v
+   Product     HTTP Session
+   Catalog     Shopping Cart
+       |
+       v
+  Rendered Storefront
+```
+
+The application follows a Spring MVC architecture. The controller processes browser requests, manages the in-memory product catalog and session-based cart, and supplies data to Thymeleaf for rendering the storefront.
+
+## Prerequisites
+
+Before running the project, ensure that you have:
 
 - Java Development Kit (JDK) 21
 - Git
 - A web browser
-- An internet connection to download Maven dependencies
+- An internet connection for downloading Maven dependencies on the first run
 
-The project includes the Maven Wrapper, so installing Maven separately is not necessary.
+The repository includes the Maven Wrapper, so a separate Maven installation is not required.
 
-## 🚀 Getting Started
+## Installation and Setup
 
 ### 1. Clone the Repository
 
@@ -122,7 +124,7 @@ The project includes the Maven Wrapper, so installing Maven separately is not ne
 git clone https://github.com/samaira23/springboot-project.git
 ```
 
-### 2. Navigate to the Project
+### 2. Navigate to the Project Directory
 
 ```bash
 cd springboot-project
@@ -134,7 +136,7 @@ cd springboot-project
 java -version
 ```
 
-Ensure that JDK 21 is installed and available.
+Ensure that Java 21 is installed and available in your system's PATH.
 
 ### 4. Run the Application
 
@@ -144,40 +146,30 @@ Ensure that JDK 21 is installed and available.
 .\mvnw.cmd spring-boot:run
 ```
 
-**macOS / Linux:**
+**macOS or Linux:**
 
 ```bash
 chmod +x mvnw
 ./mvnw spring-boot:run
 ```
 
-Wait for Spring Boot to finish starting the application.
+Maven will download the required dependencies and start the Spring Boot application.
 
 ### 5. Open the Website
 
-Open your browser and visit:
+Once the application has started, open:
 
 http://localhost:8080
 
-The MiniStore website should load.
+You can now browse products, search and filter the catalog, manage your shopping cart, and try the demo checkout.
 
-Keep the terminal running while using the application. Press `Ctrl + C` to stop the server.
+To stop the application, press `Ctrl + C` in the terminal.
 
-## 🗄️ Database Configuration
+## Database Configuration
 
-MiniStore uses the H2 database in file-based mode.
-
-The database configuration is defined in:
-
-`src/main/resources/application.properties`
-
-Current configuration:
+The project includes H2 Database and Spring Data JPA dependencies. The database is configured in `src/main/resources/application.properties` using the following settings:
 
 ```properties
-spring.application.name=ministore
-
-server.port=8080
-
 spring.datasource.url=jdbc:h2:file:./data/ministoredb
 spring.datasource.driver-class-name=org.h2.Driver
 spring.datasource.username=sa
@@ -188,77 +180,63 @@ spring.jpa.show-sql=true
 
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
-
-spring.thymeleaf.cache=false
 ```
 
-### H2 Database Console
+### Important Implementation Details
 
-When the application is running, the H2 console is available at:
+The current storefront does not persist products, cart contents, or orders in H2.
+
+- Products are predefined in `StoreController.java`.
+- Shopping cart contents are stored in the user's HTTP session.
+- The checkout operation displays a confirmation message and clears the cart.
+- No real payment is collected, and no order record is saved.
+
+The H2 database configuration is present, but database persistence has not been implemented for these shopping features.
+
+### H2 Console
+
+When the application is running, the configured H2 console URL is:
 
 http://localhost:8080/h2-console
 
-Use the following connection details:
+Connection settings:
 
 | Setting | Value |
 |---|---|
 | JDBC URL | `jdbc:h2:file:./data/ministoredb` |
-| User Name | `sa` |
+| Username | `sa` |
 | Password | Leave empty |
 
-The database is stored locally. Hibernate is configured to update the schema automatically.
+The console is intended for local development and database inspection.
 
-### Will the Application Work After Cloning?
+## Current Limitations
 
-Yes. The database file does not need to be committed to GitHub.
+- Product information is hardcoded rather than loaded from a database.
+- Cart contents are session-based and are not permanently stored.
+- Checkout is a demonstration and does not process payments.
+- Orders are not persisted or available as order history.
+- User registration and authentication are not implemented.
+- There is no administrative product management interface.
 
-When someone clones the repository and runs the application, H2 can create the local database and Hibernate can create or update the required tables.
+## Future Enhancements
 
-The new user will have a separate local database rather than your existing database records.
+Potential improvements include:
 
-## 🔧 Development
+- Persist products using JPA entities and repositories.
+- Implement a database-backed shopping cart.
+- Add user registration and authentication.
+- Store orders and provide order history.
+- Integrate a secure payment gateway.
+- Add product image uploads and product management.
+- Introduce an administrative dashboard.
+- Deploy the application to a cloud hosting platform.
 
-You can use any Java-compatible IDE, such as:
-
-- Visual Studio Code
-- IntelliJ IDEA
-- Eclipse
-
-For development in Visual Studio Code, install the Java extensions and open the cloned project folder.
-
-To rebuild the project on Windows:
-
-```powershell
-.\mvnw.cmd clean package
-```
-
-To run the application again:
-
-```powershell
-.\mvnw.cmd spring-boot:run
-```
-
-## 🔮 Future Enhancements
-
-Potential enhancements for the application include:
-
-- User registration and authentication
-- Product search and category filtering
-- Shopping cart and checkout functionality
-- Order management and order history
-- Payment gateway integration
-- Product image uploads
-- Administrative dashboard
-- Deployment to a cloud hosting platform
-
-These are possible future improvements, not claims about existing functionality.
-
-## 👩‍💻 Author
+## Author
 
 **Samaira Mittal**
 
 GitHub: [@samaira23](https://github.com/samaira23)
 
-## 📄 License
+## License
 
-No license is specified here. If you want others to reuse or distribute this project, consider adding an appropriate open-source license to the repository.
+No license has been specified for this project. Add a suitable license file if you intend to distribute the project under an open-source license.
