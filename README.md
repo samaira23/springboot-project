@@ -1,100 +1,142 @@
-# Student Task Manager
+# 🛍️ MiniStore – E-Commerce Website
 
-A simple full-stack web application built using **Java 21 and Spring Boot** that helps students organize, manage, and track their academic tasks.
+MiniStore is a web-based e-commerce application developed using Java and Spring Boot. It provides a foundation for an online shopping experience, with a web interface for interacting with products and managing store data.
 
-## 📌 About the Project
-
-The Student Task Manager provides a simple interface for students to maintain their daily academic activities. Users can create tasks, view saved tasks, mark tasks as completed, and delete tasks when they are no longer needed.
-
-The application uses Spring Boot REST APIs for backend operations and an H2 database for local data persistence.
+The application uses Spring Boot for backend development, Thymeleaf for server-side rendering, Spring Data JPA and Hibernate for database operations, and H2 Database for local data storage.
 
 ## ✨ Features
 
-- **Add Tasks:** Create tasks with a title and description.
-- **View Tasks:** Display all saved tasks.
-- **Mark as Completed:** Update a task's completion status.
-- **Delete Tasks:** Remove tasks that are no longer required.
-- **Task Counter:** View the total number of tasks.
-- **REST API Integration:** Perform CRUD operations through HTTP endpoints.
-- **Database Persistence:** Store tasks in a local H2 database.
-- **Simple User Interface:** Interact with tasks through a web browser.
+- **E-Commerce Interface:** A web-based interface for interacting with the online store.
+- **Product Management:** Manage product information supported by the application.
+- **Dynamic Web Pages:** Render dynamic content using Thymeleaf.
+- **Database Integration:** Store application data using H2 Database.
+- **ORM Support:** Use Spring Data JPA and Hibernate for database operations.
+- **Automatic Schema Management:** Configure Hibernate to update the database schema.
+- **Local Development:** Run the application locally without requiring a separately installed database server.
+
+> Note: The exact features available depend on the controllers, services, and templates implemented in the project.
 
 ## 🛠️ Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| Java 21 | Backend programming |
+| Java 21 | Backend programming language |
 | Spring Boot | Application framework |
-| Spring Web | REST API development |
-| Spring Data JPA | Database interaction |
-| Hibernate | Object-relational mapping |
-| H2 Database | Local data storage |
-| HTML | Web page structure |
-| CSS | Styling and responsive layout |
-| JavaScript | Frontend interactions and API requests |
+| Spring Web MVC | Handle web requests and responses |
+| Thymeleaf | Render dynamic HTML pages |
+| Spring Data JPA | Database access and persistence |
+| Hibernate | Object-relational mapping (ORM) |
+| H2 Database | Local database storage |
+| HTML | Structure of web pages |
+| CSS | Styling and layout |
+| JavaScript | Client-side interactions, where implemented |
 | Maven | Dependency and build management |
-| Git and GitHub | Version control |
+| Git & GitHub | Version control and source code hosting |
+
+## 🏗️ Application Architecture
+
+MiniStore follows a Spring Boot web application architecture.
+
+```text
+              User
+                |
+                v
+          Web Browser
+                |
+                v
+       Thymeleaf Web Interface
+                |
+                v
+       Spring Boot / MVC Layer
+                |
+                v
+       Spring Data JPA
+                |
+                v
+          Hibernate ORM
+                |
+                v
+          H2 Database
+```
+
+### How It Works
+
+1. The user interacts with the website through a browser.
+2. Spring MVC handles incoming web requests.
+3. The application processes requests using its Java components.
+4. Spring Data JPA and Hibernate handle database operations.
+5. The application returns the appropriate web page to the browser.
 
 ## 📂 Project Structure
 
+The project follows the standard Maven and Spring Boot directory structure.
+
 ```text
-student-task-manager/
+springboot-project/
+│
 ├── .mvn/
+│   └── wrapper/
+│
 ├── src/
 │   └── main/
 │       ├── java/
-│       │   └── com/example/studenttaskmanager/
-│       │       ├── model/
-│       │       │   └── Task.java
-│       │       ├── repository/
-│       │       │   └── TaskRepository.java
-│       │       ├── controller/
-│       │       │   └── TaskController.java
-│       │       └── StudentTaskManagerApplication.java
+│       │   └── com/example/
+│       │       └── ...
+│       │
 │       └── resources/
 │           ├── static/
-│           │   └── index.html
+│           │   ├── css/
+│           │   ├── js/
+│           │   └── images/
+│           │
+│           ├── templates/
+│           │   └── ...
+│           │
 │           └── application.properties
+│
+├── .gitignore
 ├── mvnw
 ├── mvnw.cmd
 ├── pom.xml
 └── README.md
 ```
 
+*Note: The directory tree above illustrates the typical Spring Boot structure. Actual package and resource names may differ in the repository.*
+
 ## ⚙️ Prerequisites
 
-Before running the project, make sure you have:
+Before running the application, install:
 
 - Java Development Kit (JDK) 21
 - Git
-- A modern web browser
-- An internet connection for the initial dependency download
+- A web browser
+- An internet connection to download Maven dependencies
 
-Maven is provided through the Maven Wrapper, so a separate Maven installation is not required.
+The project includes the Maven Wrapper, so installing Maven separately is not necessary.
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/samaira23/springboot-project.git
 ```
 
-### 2. Open the project directory
+### 2. Navigate to the Project
 
 ```bash
 cd springboot-project
 ```
 
-### 3. Verify your Java installation
+### 3. Verify Java Installation
 
 ```bash
 java -version
 ```
 
-Make sure Java 21 is installed and configured.
+Ensure that JDK 21 is installed and available.
 
-### 4. Run the application
+### 4. Run the Application
 
 **Windows PowerShell:**
 
@@ -102,140 +144,121 @@ Make sure Java 21 is installed and configured.
 .\mvnw.cmd spring-boot:run
 ```
 
-**macOS/Linux:**
+**macOS / Linux:**
 
 ```bash
 chmod +x mvnw
 ./mvnw spring-boot:run
 ```
 
-Wait until Spring Boot starts successfully.
+Wait for Spring Boot to finish starting the application.
 
-### 5. Open the application
+### 5. Open the Website
 
 Open your browser and visit:
 
-**http://localhost:8080**
+http://localhost:8080
 
-Keep the terminal running while using the application.
+The MiniStore website should load.
 
-## 🔗 REST API Endpoints
-
-The application provides the following endpoints for task management.
-
-| HTTP Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/tasks` | Retrieve all tasks |
-| POST | `/api/tasks` | Create a new task |
-| PUT | `/api/tasks/{id}` | Update an existing task |
-| DELETE | `/api/tasks/{id}` | Delete a task |
-
-### Example: Create a Task
-
-**Request:**
-
-```http
-POST /api/tasks
-Content-Type: application/json
-```
-
-**Request body:**
-
-```json
-{
-  "title": "Complete Java Assignment",
-  "description": "Finish the programming exercises",
-  "completed": false
-}
-```
-
-### Example: Retrieve Tasks
-
-```http
-GET /api/tasks
-```
-
-The API returns task information in JSON format.
+Keep the terminal running while using the application. Press `Ctrl + C` to stop the server.
 
 ## 🗄️ Database Configuration
 
-The application uses the H2 database in file-based mode to store task information locally.
+MiniStore uses the H2 database in file-based mode.
 
-The database configuration is maintained in:
+The database configuration is defined in:
 
-```text
-src/main/resources/application.properties
+`src/main/resources/application.properties`
+
+Current configuration:
+
+```properties
+spring.application.name=ministore
+
+server.port=8080
+
+spring.datasource.url=jdbc:h2:file:./data/ministoredb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+spring.thymeleaf.cache=false
 ```
-
-The application uses Spring Data JPA and Hibernate to manage database operations and the database schema.
 
 ### H2 Database Console
 
-When the application is running, visit:
+When the application is running, the H2 console is available at:
 
-**http://localhost:8080/h2-console**
+http://localhost:8080/h2-console
 
 Use the following connection details:
 
-- **JDBC URL:** `jdbc:h2:file:./data/taskdb`
-- **Username:** `sa`
-- **Password:** Leave blank
+| Setting | Value |
+|---|---|
+| JDBC URL | `jdbc:h2:file:./data/ministoredb` |
+| User Name | `sa` |
+| Password | Leave empty |
 
-The database is created locally when the application starts and is not shared automatically between different installations.
+The database is stored locally. Hibernate is configured to update the schema automatically.
 
-## 🔄 How the Application Works
+### Will the Application Work After Cloning?
 
-1. The user interacts with the web interface.
-2. JavaScript sends HTTP requests to the Spring Boot REST API.
-3. The controller receives requests and processes task operations.
-4. Spring Data JPA and Hibernate handle database interactions.
-5. The H2 database stores task information.
-6. The API returns the response, and JavaScript updates the interface.
+Yes. The database file does not need to be committed to GitHub.
 
-## 🧪 Build and Test
+When someone clones the repository and runs the application, H2 can create the local database and Hibernate can create or update the required tables.
 
-To build the project and run its available tests:
+The new user will have a separate local database rather than your existing database records.
 
-**Windows:**
+## 🔧 Development
+
+You can use any Java-compatible IDE, such as:
+
+- Visual Studio Code
+- IntelliJ IDEA
+- Eclipse
+
+For development in Visual Studio Code, install the Java extensions and open the cloned project folder.
+
+To rebuild the project on Windows:
 
 ```powershell
-.\mvnw.cmd clean verify
+.\mvnw.cmd clean package
 ```
 
-**macOS/Linux:**
+To run the application again:
 
-```bash
-./mvnw clean verify
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
-## 🚀 Future Enhancements
+## 🔮 Future Enhancements
 
-- Add task due dates and priority levels.
-- Implement task search and filtering.
-- Add student authentication and individual task lists.
-- Improve task editing functionality.
-- Deploy the application to a cloud platform.
-- Add automated tests for REST API endpoints.
+Potential enhancements for the application include:
 
-## 🎓 Learning Outcomes
+- User registration and authentication
+- Product search and category filtering
+- Shopping cart and checkout functionality
+- Order management and order history
+- Payment gateway integration
+- Product image uploads
+- Administrative dashboard
+- Deployment to a cloud hosting platform
 
-This project demonstrates practical implementation of:
+These are possible future improvements, not claims about existing functionality.
 
-- Java and object-oriented programming.
-- Spring Boot application development.
-- RESTful API design and HTTP methods.
-- Spring Data JPA and Hibernate.
-- Relational database integration.
-- Frontend and backend communication using JavaScript.
-- Maven-based dependency management.
-- Git and GitHub version control.
+## 👩‍💻 Author
 
-## 👨‍💻 Author
+**Samaira Mittal**
 
-**Samaira23**
+GitHub: [@samaira23](https://github.com/samaira23)
 
-GitHub Repository: https://github.com/samaira23/springboot-project
+## 📄 License
 
----
-
-*Developed as a learning project to practice Java, Spring Boot, REST APIs, database integration, and frontend development.*
+No license is specified here. If you want others to reuse or distribute this project, consider adding an appropriate open-source license to the repository.
