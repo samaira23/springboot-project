@@ -1,4 +1,3 @@
-
 package com.example.ecommerce;
 
 import java.util.ArrayList;
@@ -19,63 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class StoreController {
 
-    private final List<Product> products = List.of(
-    // Electronics
-    new Product(1L, "Wireless Headphones", 1999,
-        "Immersive sound and all-day comfort.",
-        "Electronics", "🎧"),
-    new Product(2L, "Smart Watch", 2499,
-        "Track your activity and stay connected.",
-        "Electronics", "⌚"),
-    new Product(3L, "Bluetooth Speaker", 1799,
-        "Portable sound for your favorite music.",
-        "Electronics", "🔊"),
-    new Product(4L, "Mechanical Keyboard", 3299,
-        "A satisfying typing experience.",
-        "Electronics", "⌨️"),
-    new Product(5L, "Wireless Mouse", 799,
-        "Comfortable and precise everyday control.",
-        "Electronics", "🖱️"),
-    new Product(6L, "Digital Camera", 12999,
-        "Capture your favorite moments.",
-        "Electronics", "📷"),
+    private final ProductRepository productRepository;
 
-    // Fashion
-    new Product(7L, "Running Shoes", 2999,
-        "Lightweight shoes for everyday adventures.",
-        "Fashion", "👟"),
-    new Product(8L, "Classic T-Shirt", 599,
-        "A soft, versatile wardrobe essential.",
-        "Fashion", "👕"),
-    new Product(9L, "Denim Jacket", 2199,
-        "A timeless layer for casual outfits.",
-        "Fashion", "🧥"),
-    new Product(10L, "Everyday Sneakers", 1899,
-        "Simple style with a comfortable fit.",
-        "Fashion", "👞"),
-
-    // Accessories
-    new Product(11L, "Travel Backpack", 1499,
-        "A practical companion for daily travel.",
-        "Accessories", "🎒"),
-    new Product(12L, "Classic Sunglasses", 999,
-        "An effortless finishing touch.",
-        "Accessories", "🕶️"),
-    new Product(13L, "Wrist Watch", 1799,
-        "A clean design for every occasion.",
-        "Accessories", "⌚"),
-    new Product(14L, "Leather Wallet", 699,
-        "Keep your essentials neatly organized.",
-        "Accessories", "👛"),
-
-    // Home
-    new Product(15L, "Coffee Mug", 399,
-        "Make your morning coffee special.",
-        "Home", "☕"),
-    new Product(16L, "Desk Lamp", 1299,
-        "Warm lighting for focused work.",
-        "Home", "💡")
-);
+    public StoreController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @SuppressWarnings("unchecked")
     private Map<Long, Integer> getCart(HttpSession session) {
@@ -99,7 +46,7 @@ public class StoreController {
 
         String search = q.trim();
 
-        List<Product> filtered = products.stream()
+        List<Product> filtered = productRepository.findAll().stream()
             .filter(p -> p.getName().toLowerCase()
                 .contains(search.toLowerCase()))
             .filter(p -> category.equals("All")
@@ -127,8 +74,7 @@ public class StoreController {
         model.addAttribute("search", search);
         model.addAttribute("selectedCategory", category);
         model.addAttribute("categories",
-            List.of("All", "Electronics", "Fashion",
-                    "Accessories", "Home"));
+            List.of("All", "Electronics", "Fashion", "Accessories", "Home"));
 
         return "index";
     }
@@ -212,10 +158,7 @@ public class StoreController {
     }
 
     private Product findProduct(Long id) {
-        return products.stream()
-            .filter(p -> p.getId().equals(id))
-            .findFirst()
-            .orElse(null);
+        return productRepository.findById(id).orElse(null);
     }
 
     public static class CartLine {
